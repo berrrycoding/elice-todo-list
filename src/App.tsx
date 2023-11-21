@@ -1,10 +1,14 @@
+import format from "date-fns/format";
 import { useState } from "react";
 import { FiCheck, FiChevronLeft, FiChevronRight, FiPlus } from "react-icons/fi";
 import todoItemsDummy from "./assets/dummy/todoItems";
 
 function App() {
   // ctrl + . , mac: cmd + .
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [todoItems, setTodoItems] = useState(todoItemsDummy);
+
+  // yyyy.MM.dd mm:ss
 
   return (
     <div style={{ position: "relative", height: "100vh", overflow: "hidden" }}>
@@ -23,7 +27,14 @@ function App() {
         <div style={{ padding: 10 }}>
           <FiChevronLeft size={25} />
         </div>
-        <div>날짜</div>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 24, fontWeight: "bold" }}>
+            {format(currentDate, "MM월 dd일")}
+          </div>
+          <div style={{ color: "#BCBCBC" }}>
+            {format(currentDate, "yyyy년")}
+          </div>
+        </div>
         <div style={{ padding: 10 }}>
           <FiChevronRight size={25} />
         </div>
@@ -36,49 +47,47 @@ function App() {
           overflowY: "auto",
         }}
       >
-        {[...todoItems, ...todoItems, ...todoItems, ...todoItems].map(
-          (item) => {
-            return (
-              <div key={item.id}>
-                {!item.isDone && (
+        {todoItems.map((item) => {
+          return (
+            <div key={item.id}>
+              {!item.isDone && (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div>{item.content}</div>
+                  <div>
+                    <FiCheck color="#666666" size={26} />
+                  </div>
+                </div>
+              )}
+              {item.isDone && (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
                   <div
                     style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
+                      textDecoration: "line-through",
+                      color: "#666666",
                     }}
                   >
-                    <div>{item.content}</div>
-                    <div>
-                      <FiCheck color="#666666" size={26} />
-                    </div>
+                    {item.content}
                   </div>
-                )}
-                {item.isDone && (
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <div
-                      style={{
-                        textDecoration: "line-through",
-                        color: "#666666",
-                      }}
-                    >
-                      {item.content}
-                    </div>
-                    <div>
-                      <FiCheck color="#CFFF48" size={26} />
-                    </div>
+                  <div>
+                    <FiCheck color="#CFFF48" size={26} />
                   </div>
-                )}
-              </div>
-            );
-          }
-        )}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
       <div
         style={{
