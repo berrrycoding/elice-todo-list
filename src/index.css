@@ -1,10 +1,33 @@
+/*
+[class] -> <div className="app" />
+.cc {
+}
+
+[id] -> <div id="app" />
+.app {
+}
+
+[:root] -> 최상위 element. html
+:root {
+  
+}
+*/
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* 브라우저가 처음에 있는 폰트부터 하나씩 시도 -> 사용 가능한 첫번째 폰트를 사용한다. */
+
   line-height: 1.5;
+  /* line-height는 텍스트의 줄 간격을 조정하는 역할
+  보통은 절대적인 값인 px 등으로 나타내지만, 상대적인 값으로 사용가능하다.
+  이 속성이 적용된 element의 font-size에 대한 배수를 곱한 것.
+  ex) font-size: 16px; -> line-height의 절댓값: 16*1.5px; */
+
   font-weight: 400;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
+  /* opacity: 1; */
+  /* 불투명도: 0~1, 0: 안보임. 1: 뚜렷함, 0.5: 흐림 */
   background-color: #242424;
 
   font-synthesis: none;
@@ -26,12 +49,36 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
+  /* 
+  flex와 grid 둘 다 사용 가능함 
+  flex에서 아래를 대체해서 place-items: center를 사용할 수 있다.
+  justify-content: center;
+  align-items: center;
+   */
   min-width: 320px;
   min-height: 100vh;
+  /* vw(viewport width), vh(viewport height) */
 }
 
 h1 {
   font-size: 3.2em;
+  /*
+  단위
+  - 절대적 크기 단위
+    px
+      - 크기가 고정된 경우 사용 -> 다양한 화면 크기와 해상도에 따라서 동일한 크기를 갖게 한다.
+      - 화면 상의 실제 픽셀 수를 기반으로 한다
+  - 상대적 크기 단위
+    [em]
+    - 부모 요소의 font-size를 기준으로 상대적인 크기를 설정합니다.
+    - ex) font-size: 3.2em; -> font-size: (16*3.2)px
+    -> font-size를 설정할 수 있는 기능 -> fontSize: small, medium, large
+    -> 최상위 부모에 font-size: small ? "12px" : medium ? "16px" : "20px";
+    [rem]
+    - 최상위 요소를 기준으로 상대적인 크기를 설정
+    [%]
+    [vw, vh]
+  */
   line-height: 1.1;
 }
 
@@ -45,6 +92,18 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  /* 
+  transition은 요소의 스타일 변화가 부드럽게 일어나도록 하는 속성 
+  [사용법]
+  transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
+  사용 가능한 transition-timing-function 값
+    - linear: 일정한 속도로 변화합니다.
+    - ease: 천천히 시작하여 빨라졌다가 다시 천천히 끝납니다.
+    - ease-in: 천천히 시작하여 점점 빨라집니다.
+    - ease-out: 빠르게 시작하여 점점 느려집니다.
+    - ease-in-out: 천천히 시작하여 중간에 빨라졌다가 다시 천천히 끝납니다.
+    - cubic-bezier(n,n,n,n): 사용자가 정의한 속도 곡선을 생성합니다.
+  */
 }
 button:hover {
   border-color: #646cff;
@@ -54,6 +113,7 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* "light" | 'dark' */
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
