@@ -34,7 +34,7 @@ function App() {
   function handleAddTodoItem() {
     // TODO: add 관련 LocalStorage 로직
 
-    // TODO: add staet 관련 로직
+    // TODO: add state 관련 로직
 
     handleResetInputMode();
   }
@@ -45,6 +45,41 @@ function App() {
 
   function handleChangeEditInputValue(event: ChangeEvent<HTMLInputElement>) {
     setEditInputValue(event.target.value);
+  }
+
+  // 1. index를 input으로 가져오는 경우
+  function handleDone(index: number) {
+    const newTodoItems = [...todoItems];
+    newTodoItems[index].isDone = true;
+
+    setTodoItems(newTodoItems);
+  }
+
+  // 2. item을 input으로 가져오는 경우
+  // function handleDone(item: TodoItem) {
+  //   // 1. todoItems에서 findIndex를 통해서 index 찾기
+  //   // 2. todoItems를 map함수를 사용해서 item.id가 같은 것은 isDone=true로 하고 나머지는 그냥 두기
+  //       -> for문이 동작하므로 1번 방법인 index를 가져와서 배열을 조작하는 것보다 연산횟수가 훨씬 더 많음.
+  //   setTodoItems(값);
+  //   setTodoItems((previousState) =>
+  //     previousState.map((_item) => {
+  //       if (_item.id === item.id) {
+  //         return {
+  //           ..._item,
+  //           isDone: true,
+  //         };
+  //       } else {
+  //         return _item;
+  //       }
+  //     })
+  //   );
+  // }
+
+  function handleCancelDone(index: number) {
+    const newTodoItems = [...todoItems];
+    newTodoItems[index].isDone = false;
+
+    setTodoItems(newTodoItems);
   }
 
   return (
@@ -137,12 +172,13 @@ function App() {
             </div>
           </div>
         )}
-        {todoItems.map((item) => {
+        {todoItems.map((item, index) => {
           const isEditMode =
             inputMode.type === "edit" && inputMode.item === item;
 
           return (
             <div key={item.id}>
+              {/* EditInput */}
               {isEditMode && (
                 <div>
                   <input
@@ -202,7 +238,12 @@ function App() {
                   onClick={() => handleEditMode(item)}
                 >
                   <div>{item.content}</div>
-                  <div>
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDone(index);
+                    }}
+                  >
                     <FiCheck color="#666666" size={26} />
                   </div>
                 </div>
@@ -223,7 +264,7 @@ function App() {
                   >
                     {item.content}
                   </div>
-                  <div>
+                  <div onClick={() => handleCancelDone(index)}>
                     <FiCheck color="#CFFF48" size={26} />
                   </div>
                 </div>
