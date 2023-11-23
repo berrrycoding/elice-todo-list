@@ -1,4 +1,6 @@
+import addDays from "date-fns/addDays";
 import format from "date-fns/format";
+import subDays from "date-fns/subDays";
 import { ChangeEvent, useState } from "react";
 import { FiCheck, FiChevronLeft, FiChevronRight, FiPlus } from "react-icons/fi";
 import todoItemsDummy from "./assets/dummy/todoItems";
@@ -82,6 +84,17 @@ function App() {
     setTodoItems(newTodoItems);
   }
 
+  function handleMoveNextDate() {
+    // 현재 날짜보다 하루 뒤. +1 -> 그걸 setCurrentDate에 적용해주기
+    const newDate = addDays(currentDate, 1);
+    setCurrentDate(newDate);
+  }
+
+  function handleMovePreviousDate() {
+    const newDate = subDays(currentDate, 1);
+    setCurrentDate(newDate);
+  }
+
   return (
     <div style={{ position: "relative", height: "100vh", overflow: "hidden" }}>
       <div
@@ -96,7 +109,7 @@ function App() {
           padding: "20px 0",
         }}
       >
-        <div style={{ padding: 10 }}>
+        <div onClick={handleMovePreviousDate} style={{ padding: 10 }}>
           <FiChevronLeft size={25} />
         </div>
         <div style={{ textAlign: "center" }}>
@@ -107,7 +120,7 @@ function App() {
             {format(currentDate, "yyyy년")}
           </div>
         </div>
-        <div style={{ padding: 10 }}>
+        <div onClick={handleMoveNextDate} style={{ padding: 10 }}>
           <FiChevronRight size={25} />
         </div>
       </div>
