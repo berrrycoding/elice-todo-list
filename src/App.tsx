@@ -1,7 +1,7 @@
 import addDays from "date-fns/addDays";
 import format from "date-fns/format";
 import subDays from "date-fns/subDays";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { FiCheck, FiChevronLeft, FiChevronRight, FiPlus } from "react-icons/fi";
 import todoItemsDummy from "./assets/dummy/todoItems";
 import { Spacing } from "./components/shared/Spacing";
@@ -10,11 +10,8 @@ import { InputMode, TodoItem } from "./types";
 const defaultInputMode: InputMode = { type: "default" };
 
 function App() {
-  // ctrl + . , mac: cmd + .
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [todoItems, setTodoItems] = useState<TodoItem[]>(
-    todoItemsDummy as TodoItem[]
-  );
+  const [todoItems, setTodoItems] = useState<TodoItem[]>([]);
 
   const [inputMode, setInputMode] = useState<InputMode>(defaultInputMode);
   const [addInputValue, setAddInputValue] = useState("");
@@ -94,6 +91,20 @@ function App() {
     const newDate = subDays(currentDate, 1);
     setCurrentDate(newDate);
   }
+
+  // currentDate에 따라서 todoItems를 Filtering해서 보여주기
+  // 1. 맨처음 렌더링 되었을 때
+  // 2. state currentDate가 바뀌었을 때
+  useEffect(() => {
+    // 현재 currentDate는 Date 타입이다.
+    // string 타입인 "yyyy-MM-dd"
+    const dateString = format(currentDate, "yyyy-MM-dd");
+
+    const newTodoItem = todoItemsDummy.filter(
+      (item) => item.createdAt === dateString
+    );
+    setTodoItems(newTodoItem);
+  }, [currentDate]);
 
   return (
     <div style={{ position: "relative", height: "100vh", overflow: "hidden" }}>
