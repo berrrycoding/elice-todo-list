@@ -45,6 +45,9 @@ function App() {
           height: "100%",
           boxSizing: "border-box",
           overflowY: "auto",
+          display: "flex",
+          flexDirection: "column",
+          gap: 14,
         }}
       >
         {todoItems.map((item) => {
