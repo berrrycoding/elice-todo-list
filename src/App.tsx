@@ -1,14 +1,41 @@
 import format from "date-fns/format";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { FiCheck, FiChevronLeft, FiChevronRight, FiPlus } from "react-icons/fi";
 import todoItemsDummy from "./assets/dummy/todoItems";
+import { Spacing } from "./components/shared/Spacing";
+import { InputMode, TodoItem } from "./types";
+
+const defaultInputMode: InputMode = { type: "default" };
 
 function App() {
   // ctrl + . , mac: cmd + .
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [todoItems, setTodoItems] = useState(todoItemsDummy);
+  const [todoItems, setTodoItems] = useState<TodoItem[]>(
+    todoItemsDummy as TodoItem[]
+  );
 
-  // yyyy.MM.dd mm:ss
+  const [inputMode, setInputMode] = useState<InputMode>(defaultInputMode);
+  const [addInputValue, setAddInputValue] = useState("");
+
+  function handleAddMode() {
+    setInputMode({ type: "add" });
+  }
+
+  function handleResetInputMode() {
+    setInputMode(defaultInputMode);
+  }
+
+  function handleAddTodoItem() {
+    // TODO: add 관련 LocalStorage 로직
+
+    // TODO: add staet 관련 로직
+
+    handleResetInputMode();
+  }
+
+  function handleChangeAddInputValue(event: ChangeEvent<HTMLInputElement>) {
+    setAddInputValue(event.target.value);
+  }
 
   return (
     <div style={{ position: "relative", height: "100vh", overflow: "hidden" }}>
@@ -50,6 +77,56 @@ function App() {
           gap: 14,
         }}
       >
+        {/* AddInput */}
+        {inputMode.type === "add" && (
+          <div>
+            <input
+              style={{
+                background: "none",
+                border: "none",
+                borderBottom: "1px solid #666666",
+                outline: "none",
+                color: "#fff",
+                padding: "6px 0",
+                fontSize: "1em",
+                width: "100%",
+              }}
+              type="text"
+              placeholder="새로운 할일을 입력할 수 있어요 :)"
+              value={addInputValue}
+              onChange={handleChangeAddInputValue}
+            />
+            <Spacing size={5} />
+            <div>
+              <button
+                onClick={handleResetInputMode}
+                style={{
+                  background: "none",
+                  border: "1px solid #CFFF48",
+                  borderRadius: 14,
+                  color: "#CFFF48",
+                  padding: "5px 10px",
+                  marginRight: 4,
+                  fontWeight: 700,
+                }}
+              >
+                취소
+              </button>
+              <button
+                onClick={handleAddTodoItem}
+                style={{
+                  background: "#CFFF48",
+                  padding: "5px 10px",
+                  border: "1px solid transparent",
+                  borderRadius: 14,
+                  fontWeight: 700,
+                }}
+              >
+                저장
+              </button>
+            </div>
+          </div>
+        )}
         {todoItems.map((item) => {
           return (
             <div key={item.id}>
@@ -93,6 +170,7 @@ function App() {
         })}
       </div>
       <div
+        onClick={handleAddMode}
         style={{
           position: "absolute",
           right: 20,
