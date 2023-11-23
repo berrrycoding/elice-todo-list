@@ -3,10 +3,10 @@ import format from "date-fns/format";
 import subDays from "date-fns/subDays";
 import { ChangeEvent, useState } from "react";
 import { FiCheck, FiChevronLeft, FiChevronRight, FiPlus } from "react-icons/fi";
+import styled from "styled-components";
 import { InputMode, TodoItem } from "../../../types";
 import { Spacing } from "../../shared/Spacing";
 import useTodoItems from "./hooks/useTodoItems";
-import "./index.scss";
 
 const defaultInputMode: InputMode = { type: "default" };
 
@@ -53,28 +53,28 @@ export default function Main() {
   }
 
   return (
-    <div className="container">
-      <div className="date-navigator">
+    <Container>
+      <DateNavigator>
         <div onClick={handleMovePreviousDate} className="move-button">
           <FiChevronLeft size={25} />
         </div>
-        <div className="text-center">
+        <TextCenter>
           <div className="date-big-font">
             {format(currentDate, "MM월 dd일")}
           </div>
           <div className="date-normal-font">
             {format(currentDate, "yyyy년")}
           </div>
-        </div>
+        </TextCenter>
         <div onClick={handleMoveNextDate} className="move-button">
           <FiChevronRight size={25} />
         </div>
-      </div>
-      <div className="todo-list">
+      </DateNavigator>
+      <TodoList>
         {/* AddInput */}
         {inputMode.type === "add" && (
           <div>
-            <input
+            <TextInput
               type="text"
               placeholder="새로운 할일을 입력할 수 있어요 :)"
               value={addInputValue}
@@ -82,12 +82,8 @@ export default function Main() {
             />
             <Spacing size={5} />
             <div>
-              <button onClick={handleResetInputMode} className="cancel-button">
-                취소
-              </button>
-              <button onClick={onAddTodoItem} className="save-button">
-                저장
-              </button>
+              <CancelButton onClick={handleResetInputMode}>취소</CancelButton>
+              <SaveButton onClick={onAddTodoItem}>저장</SaveButton>
             </div>
           </div>
         )}
@@ -100,7 +96,7 @@ export default function Main() {
               {/* EditInput */}
               {isEditMode && (
                 <div>
-                  <input
+                  <TextInput
                     type="text"
                     placeholder="새로운 할일을 입력할 수 있어요 :)"
                     value={editInputValue}
@@ -108,21 +104,16 @@ export default function Main() {
                   />
                   <Spacing size={5} />
                   <div>
-                    <button
-                      onClick={handleResetInputMode}
-                      className="cancel-button"
-                    >
+                    <CancelButton onClick={handleResetInputMode}>
                       취소
-                    </button>
-                    <button onClick={onEditTodoItem} className="save-button">
-                      저장
-                    </button>
+                    </CancelButton>
+                    <SaveButton onClick={onEditTodoItem}>저장</SaveButton>
                   </div>
                 </div>
               )}
               {!isEditMode && !item.isDone && (
                 <div className="todo-item" onClick={() => handleEditMode(item)}>
-                  <div>{item.content}</div>
+                  <Content isDone={false}>{item.content}</Content>
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
@@ -135,7 +126,7 @@ export default function Main() {
               )}
               {!isEditMode && item.isDone && (
                 <div className="todo-item">
-                  <div className="done">{item.content}</div>
+                  <Content isDone={true}>{item.content}</Content>
                   <div onClick={() => onCancelDone(index)}>
                     <FiCheck color="#CFFF48" size={26} />
                   </div>
@@ -144,10 +135,112 @@ export default function Main() {
             </div>
           );
         })}
-      </div>
-      <div onClick={handleAddMode} className="add-button">
+      </TodoList>
+      <AddButton onClick={handleAddMode}>
         <FiPlus color="#1E1E1E" size={24} />
-      </div>
-    </div>
+      </AddButton>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+`;
+
+const DateNavigator = styled.div`
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+
+  .move-button {
+    padding: 10px;
+  }
+
+  .date-big-font {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .date-normal-font {
+    color: var(--color-gray-0);
+  }
+`;
+
+const TextCenter = styled.div`
+  text-align: center;
+`;
+
+const TodoList = styled.div`
+  padding: 20px;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  .todo-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .done {
+      text-decoration: line-through;
+      color: var(--color-gray-1);
+    }
+  }
+`;
+
+const Content = styled.div<{ isDone: boolean }>`
+  text-decoration: ${(props) => (props.isDone ? "line-through" : "none")};
+  color: ${(props) => (props.isDone ? "var(--color-gray-1)" : "inherit")};
+`;
+
+const TextInput = styled.input`
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--color-gray-1);
+  outline: none;
+  color: var(--color-white);
+  padding: 6px 0;
+  font-size: 1em;
+  width: 100%;
+`;
+
+const CancelButton = styled.button`
+  background: none;
+  border: 1px solid var(--color-primary);
+  border-radius: 14px;
+  color: var(--color-primary);
+  padding: 5px 10px;
+  margin-right: 4px;
+  font-weight: 700;
+`;
+
+const SaveButton = styled.button`
+  background: var(--color-primary);
+  border: 1px solid transparent;
+  border-radius: 14px;
+  padding: 5px 10px;
+  font-weight: 700;
+`;
+
+const AddButton = styled.div`
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  width: 32px;
+  height: 32px;
+  border-radius: 30px;
+  background: var(--color-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
