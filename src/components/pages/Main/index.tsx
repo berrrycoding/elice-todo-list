@@ -5,34 +5,19 @@ import { ChangeEvent, useState } from "react";
 import { FiCheck, FiChevronLeft, FiChevronRight, FiPlus } from "react-icons/fi";
 import styled from "styled-components";
 import { colors } from "../../../theme/colors";
-import { InputMode, TodoItem } from "../../../types";
 import { Spacing } from "../../shared/Spacing";
+import useInputMode from "./hooks/useInputMode";
 import useTodoItems from "./hooks/useTodoItems";
-
-const defaultInputMode: InputMode = { type: "default" };
 
 export default function Main() {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const { todoItems, onAddTodoItem, onEditTodoItem, onDone, onCancelDone } =
     useTodoItems(currentDate);
+  const { inputMode, onAddMode, onEditMode, onResetInputMode } = useInputMode();
 
   const [addInputValue, setAddInputValue] = useState("");
   const [editInputValue, setEditInputValue] = useState("");
-  const [inputMode, setInputMode] = useState<InputMode>(defaultInputMode);
-
-  function handleAddMode() {
-    setInputMode({ type: "add" });
-  }
-
-  function handleEditMode(item: TodoItem) {
-    setInputMode({ type: "edit", item });
-    setEditInputValue(item.content);
-  }
-
-  function handleResetInputMode() {
-    setInputMode(defaultInputMode);
-  }
 
   function handleChangeAddInputValue(event: ChangeEvent<HTMLInputElement>) {
     setAddInputValue(event.target.value);
@@ -83,7 +68,7 @@ export default function Main() {
             />
             <Spacing size={5} />
             <div>
-              <CancelButton onClick={handleResetInputMode}>취소</CancelButton>
+              <CancelButton onClick={onResetInputMode}>취소</CancelButton>
               <SaveButton onClick={onAddTodoItem}>저장</SaveButton>
             </div>
           </div>
@@ -105,15 +90,13 @@ export default function Main() {
                   />
                   <Spacing size={5} />
                   <div>
-                    <CancelButton onClick={handleResetInputMode}>
-                      취소
-                    </CancelButton>
+                    <CancelButton onClick={onResetInputMode}>취소</CancelButton>
                     <SaveButton onClick={onEditTodoItem}>저장</SaveButton>
                   </div>
                 </div>
               )}
               {!isEditMode && !item.isDone && (
-                <div className="todo-item" onClick={() => handleEditMode(item)}>
+                <div className="todo-item" onClick={() => onEditMode(item)}>
                   <Content isDone={false}>{item.content}</Content>
                   <div
                     onClick={(e) => {
@@ -137,7 +120,7 @@ export default function Main() {
           );
         })}
       </TodoList>
-      <AddButton onClick={handleAddMode}>
+      <AddButton onClick={onAddMode}>
         <FiPlus color={colors.dark} size={24} />
       </AddButton>
     </Container>
