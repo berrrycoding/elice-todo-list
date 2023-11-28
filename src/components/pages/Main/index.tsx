@@ -4,6 +4,7 @@ import subDays from "date-fns/subDays";
 import { ChangeEvent, useState } from "react";
 import { FiCheck, FiChevronLeft, FiChevronRight, FiPlus } from "react-icons/fi";
 import styled from "styled-components";
+import { colors } from "../../../theme/colors";
 import { InputMode, TodoItem } from "../../../types";
 import { Spacing } from "../../shared/Spacing";
 import useTodoItems from "./hooks/useTodoItems";
@@ -120,7 +121,7 @@ export default function Main() {
                       onDone(index);
                     }}
                   >
-                    <FiCheck color="#666666" size={26} />
+                    <FiCheck color={colors.gray[1]} size={26} />
                   </div>
                 </div>
               )}
@@ -128,7 +129,7 @@ export default function Main() {
                 <div className="todo-item">
                   <Content isDone={true}>{item.content}</Content>
                   <div onClick={() => onCancelDone(index)}>
-                    <FiCheck color="#CFFF48" size={26} />
+                    <FiCheck color={colors.primary} size={26} />
                   </div>
                 </div>
               )}
@@ -137,7 +138,7 @@ export default function Main() {
         })}
       </TodoList>
       <AddButton onClick={handleAddMode}>
-        <FiPlus color="#1E1E1E" size={24} />
+        <FiPlus color={colors.dark} size={24} />
       </AddButton>
     </Container>
   );
@@ -169,7 +170,7 @@ const DateNavigator = styled.div`
   }
 
   .date-normal-font {
-    color: var(--color-gray-0);
+    color: ${colors.gray[1]};
   }
 `;
 
@@ -193,22 +194,22 @@ const TodoList = styled.div`
 
     .done {
       text-decoration: line-through;
-      color: var(--color-gray-1);
+      color: ${colors.gray[1]};
     }
   }
 `;
 
 const Content = styled.div<{ isDone: boolean }>`
   text-decoration: ${(props) => (props.isDone ? "line-through" : "none")};
-  color: ${(props) => (props.isDone ? "var(--color-gray-1)" : "inherit")};
+  color: ${(props) => (props.isDone ? colors.gray[1] : "inherit")};
 `;
 
 const TextInput = styled.input`
   background: none;
   border: none;
-  border-bottom: 1px solid var(--color-gray-1);
+  border-bottom: 1px solid ${colors.gray[1]};
   outline: none;
-  color: var(--color-white);
+  color: ${colors.white};
   padding: 6px 0;
   font-size: 1em;
   width: 100%;
@@ -216,16 +217,16 @@ const TextInput = styled.input`
 
 const CancelButton = styled.button`
   background: none;
-  border: 1px solid var(--color-primary);
+  border: 1px solid ${colors.primary};
   border-radius: 14px;
-  color: var(--color-primary);
+  color: ${colors.primary};
   padding: 5px 10px;
   margin-right: 4px;
   font-weight: 700;
 `;
 
 const SaveButton = styled.button`
-  background: var(--color-primary);
+  background: ${colors.primary};
   border: 1px solid transparent;
   border-radius: 14px;
   padding: 5px 10px;
@@ -239,7 +240,7 @@ const AddButton = styled.div`
   width: 32px;
   height: 32px;
   border-radius: 30px;
-  background: var(--color-primary);
+  background: ${colors.primary};
   display: flex;
   justify-content: center;
   align-items: center;
