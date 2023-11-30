@@ -6,6 +6,7 @@ import { FiCheck, FiChevronLeft, FiChevronRight, FiPlus } from "react-icons/fi";
 import styled from "styled-components";
 import { colors } from "../../../theme/colors";
 import { Spacing } from "../../shared/Spacing";
+import ProgressPercentage from "./ProgressPercentage";
 import useInputMode from "./hooks/useInputMode";
 import useTodoItems from "./hooks/useTodoItems";
 
@@ -56,6 +57,10 @@ export default function Main() {
           <FiChevronRight size={25} />
         </div>
       </DateNavigator>
+      <SpaceBetween>
+        <ProgressPercentage />
+        {/* SelectBox 추가 예정 */}
+      </SpaceBetween>
       <TodoList>
         {/* AddInput */}
         {inputMode.type === "add" && (
@@ -226,5 +231,12 @@ const AddButton = styled.div`
   background: ${colors.primary};
   display: flex;
   justify-content: center;
+  align-items: center;
+`;
+
+const SpaceBetween = styled.div`
+  margin: 20px;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 `;
