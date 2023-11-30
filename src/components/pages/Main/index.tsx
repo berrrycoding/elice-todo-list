@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { colors } from "../../../theme/colors";
 import { Spacing } from "../../shared/Spacing";
 import ProgressPercentage from "./ProgressPercentage";
+import SelectFilter from "./SelectFilter";
 import useInputMode from "./hooks/useInputMode";
 import useTodoItems from "./hooks/useTodoItems";
 
@@ -59,7 +60,7 @@ export default function Main() {
       </DateNavigator>
       <SpaceBetween>
         <ProgressPercentage />
-        {/* SelectBox 추가 예정 */}
+        <SelectFilter />
       </SpaceBetween>
       <TodoList>
         {/* AddInput */}

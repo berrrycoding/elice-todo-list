@@ -1,5 +1,5 @@
 import { atom, selector } from "recoil";
-import { TodoItem } from "../types";
+import { FilterType, TodoItem } from "../types";
 
 export const todoItemsAtom = atom<TodoItem[]>({
   key: "todoItemsAtom",
@@ -24,4 +24,7 @@ export const todoItemsProgressPercentageSelector = selector({
   },
 });
 
-// const todoItemsProgressPercentage = useRecoilValue(todoItemsProgressPercentageSelector)
+export const filterAtom = atom<FilterType>({
+  key: "filterAtom",
+  default: "all",
+});

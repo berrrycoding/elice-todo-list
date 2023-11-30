@@ -9,3 +9,5 @@ export type InputMode = {
   type: "add" | "edit" | "default";
   item?: TodoItem;
 };
+
+export type FilterType = "all" | "done" | "not yet";
