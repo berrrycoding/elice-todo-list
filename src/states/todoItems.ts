@@ -1,9 +1,11 @@
 import { atom, selector } from "recoil";
+import todoItemsDummy from "../assets/dummy/todoItems";
 import { FilterType, TodoItem } from "../types";
+import { getFormattedDate } from "../utils/getFormattedDate";
 
 export const todoItemsAtom = atom<TodoItem[]>({
   key: "todoItemsAtom",
-  default: [],
+  default: todoItemsDummy,
 });
 
 export const filteredTodoItemsSelector = selector({
@@ -11,16 +13,23 @@ export const filteredTodoItemsSelector = selector({
   get: ({ get }) => {
     const todoItems = get(todoItemsAtom);
     const filter = get(filterAtom);
+    const currentDate = get(currentDateAtom);
+
+    const dateString = getFormattedDate(currentDate);
+
+    const newTodoItem = todoItems.filter(
+      (item) => item.createdAt === dateString
+    );
 
     switch (filter) {
       case "all": {
-        return todoItems;
+        return newTodoItem;
       }
       case "done": {
-        return todoItems.filter((item) => item.isDone);
+        return newTodoItem.filter((item) => item.isDone);
       }
       case "not yet": {
-        return todoItems.filter((item) => !item.isDone);
+        return newTodoItem.filter((item) => !item.isDone);
       }
     }
   },

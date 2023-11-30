@@ -1,9 +1,5 @@
-import format from "date-fns/format";
-import { useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import todoItemsDummy from "../../../../assets/dummy/todoItems";
 import {
-  currentDateAtom,
   filteredTodoItemsSelector,
   todoItemsAtom,
 } from "../../../../states/todoItems";
@@ -19,7 +15,6 @@ export default function useTodoItems() {
   // 로컬 state <-> 전역 state (recoil)
   const setTodoItems = useSetRecoilState(todoItemsAtom);
   const filteredTodoItems = useRecoilValue(filteredTodoItemsSelector);
-  const currentDate = useRecoilValue(currentDateAtom);
 
   function handleAddTodoItem() {
     // TODO: add 관련 LocalStorage 로직
@@ -44,17 +39,6 @@ export default function useTodoItems() {
 
     setTodoItems(newTodoItems);
   }
-
-  useEffect(() => {
-    // 현재 currentDate는 Date 타입이다.
-    // string 타입인 "yyyy-MM-dd"
-    const dateString = format(currentDate, "yyyy-MM-dd");
-
-    const newTodoItem = todoItemsDummy.filter(
-      (item) => item.createdAt === dateString
-    );
-    setTodoItems(newTodoItem);
-  }, [currentDate, setTodoItems]);
 
   return {
     todoItems: filteredTodoItems,
