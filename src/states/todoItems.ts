@@ -6,6 +6,26 @@ export const todoItemsAtom = atom<TodoItem[]>({
   default: [],
 });
 
+export const filteredTodoItemsSelector = selector({
+  key: "filteredTodoItemsSelector",
+  get: ({ get }) => {
+    const todoItems = get(todoItemsAtom);
+    const filter = get(filterAtom);
+
+    switch (filter) {
+      case "all": {
+        return todoItems;
+      }
+      case "done": {
+        return todoItems.filter((item) => item.isDone);
+      }
+      case "not yet": {
+        return todoItems.filter((item) => !item.isDone);
+      }
+    }
+  },
+});
+
 // 1. atom의 파생된 상태 -> atom을 재구성할 수 있는 기능
 // 다시 설정할 수 없는 값 -> Read Only
 export const todoItemsProgressPercentageSelector = selector({

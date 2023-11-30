@@ -1,8 +1,11 @@
 import format from "date-fns/format";
 import { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import todoItemsDummy from "../../../../assets/dummy/todoItems";
-import { todoItemsAtom } from "../../../../states/todoItems";
+import {
+  filteredTodoItemsSelector,
+  todoItemsAtom,
+} from "../../../../states/todoItems";
 
 // 문제점: currentDate를 입력받아야한다.
 // [해결]
@@ -13,7 +16,8 @@ import { todoItemsAtom } from "../../../../states/todoItems";
 //    http://localhost:5173/?currentDate=2023-11-23
 export default function useTodoItems(currentDate: Date) {
   // 로컬 state <-> 전역 state (recoil)
-  const [todoItems, setTodoItems] = useRecoilState(todoItemsAtom);
+  const setTodoItems = useSetRecoilState(todoItemsAtom);
+  const filteredTodoItems = useRecoilValue(filteredTodoItemsSelector);
 
   function handleAddTodoItem() {
     // TODO: add 관련 LocalStorage 로직
@@ -26,14 +30,14 @@ export default function useTodoItems(currentDate: Date) {
   }
 
   function handleDone(index: number) {
-    const newTodoItems = [...todoItems];
+    const newTodoItems = [...filteredTodoItems];
     newTodoItems[index].isDone = true;
 
     setTodoItems(newTodoItems);
   }
 
   function handleCancelDone(index: number) {
-    const newTodoItems = [...todoItems];
+    const newTodoItems = [...filteredTodoItems];
     newTodoItems[index].isDone = false;
 
     setTodoItems(newTodoItems);
@@ -51,7 +55,7 @@ export default function useTodoItems(currentDate: Date) {
   }, [currentDate, setTodoItems]);
 
   return {
-    todoItems,
+    todoItems: filteredTodoItems,
     onAddTodoItem: handleAddTodoItem,
     onEditTodoItem: handleEditTodoItem,
     onDone: handleDone,
