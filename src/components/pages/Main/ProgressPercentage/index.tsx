@@ -1,5 +1,7 @@
 import { useRecoilValue } from "recoil";
+import styled from "styled-components";
 import { todoItemsProgressPercentageSelector } from "../../../../states/todoItems";
+import { colors } from "../../../../theme/colors";
 
 // 반복적으로 계산해야 하는 경우 -> 최적화 방법
 // 1. percentage를 State로 선언하고, useEffect안에서 계산해준다.
@@ -12,5 +14,11 @@ export default function ProgressPercentage() {
     todoItemsProgressPercentageSelector
   );
 
-  return <div style={{ padding: 20 }}>⛳️ 달성률 {progressPercentage}%</div>;
+  return <StyledText>⛳️ 달성률 {progressPercentage}%</StyledText>;
 }
+
+const StyledText = styled.div`
+  font-size: 16px;
+  font-weight: bold;
+  color: ${colors.white};
+`;
