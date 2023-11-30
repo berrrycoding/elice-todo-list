@@ -1,21 +1,17 @@
-import addDays from "date-fns/addDays";
-import format from "date-fns/format";
-import subDays from "date-fns/subDays";
 import { ChangeEvent, useState } from "react";
-import { FiCheck, FiChevronLeft, FiChevronRight, FiPlus } from "react-icons/fi";
+import { FiCheck, FiPlus } from "react-icons/fi";
 import styled from "styled-components";
 import { colors } from "../../../theme/colors";
 import { Spacing } from "../../shared/Spacing";
+import DateNavigator from "./DateNavigator";
 import ProgressPercentage from "./ProgressPercentage";
 import SelectFilter from "./SelectFilter";
 import useInputMode from "./hooks/useInputMode";
 import useTodoItems from "./hooks/useTodoItems";
 
 export default function Main() {
-  const [currentDate, setCurrentDate] = useState(new Date());
-
   const { todoItems, onAddTodoItem, onEditTodoItem, onDone, onCancelDone } =
-    useTodoItems(currentDate);
+    useTodoItems();
   const { inputMode, onAddMode, onEditMode, onResetInputMode } = useInputMode();
 
   const [addInputValue, setAddInputValue] = useState("");
@@ -29,35 +25,9 @@ export default function Main() {
     setEditInputValue(event.target.value);
   }
 
-  function handleMoveNextDate() {
-    // 현재 날짜보다 하루 뒤. +1 -> 그걸 setCurrentDate에 적용해주기
-    const newDate = addDays(currentDate, 1);
-    setCurrentDate(newDate);
-  }
-
-  function handleMovePreviousDate() {
-    const newDate = subDays(currentDate, 1);
-    setCurrentDate(newDate);
-  }
-
   return (
     <Container>
-      <DateNavigator>
-        <div onClick={handleMovePreviousDate} className="move-button">
-          <FiChevronLeft size={25} />
-        </div>
-        <TextCenter>
-          <div className="date-big-font">
-            {format(currentDate, "MM월 dd일")}
-          </div>
-          <div className="date-normal-font">
-            {format(currentDate, "yyyy년")}
-          </div>
-        </TextCenter>
-        <div onClick={handleMoveNextDate} className="move-button">
-          <FiChevronRight size={25} />
-        </div>
-      </DateNavigator>
+      <DateNavigator />
       <SpaceBetween>
         <ProgressPercentage />
         <SelectFilter />
@@ -137,34 +107,6 @@ const Container = styled.div`
   position: relative;
   height: 100vh;
   overflow: hidden;
-`;
-
-const DateNavigator = styled.div`
-  position: sticky;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 0;
-
-  .move-button {
-    padding: 10px;
-  }
-
-  .date-big-font {
-    font-size: 24px;
-    font-weight: bold;
-  }
-
-  .date-normal-font {
-    color: ${colors.gray[1]};
-  }
-`;
-
-const TextCenter = styled.div`
-  text-align: center;
 `;
 
 const TodoList = styled.div`

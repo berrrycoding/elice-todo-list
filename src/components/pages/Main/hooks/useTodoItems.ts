@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import todoItemsDummy from "../../../../assets/dummy/todoItems";
 import {
+  currentDateAtom,
   filteredTodoItemsSelector,
   todoItemsAtom,
 } from "../../../../states/todoItems";
@@ -14,10 +15,11 @@ import {
 //    전역객체? -> 다른 컴포넌트에서도 가져다가 쓸 수 있고 저장도 할 수 있도록 설계되어있는 객체.
 // 3. url
 //    http://localhost:5173/?currentDate=2023-11-23
-export default function useTodoItems(currentDate: Date) {
+export default function useTodoItems() {
   // 로컬 state <-> 전역 state (recoil)
   const setTodoItems = useSetRecoilState(todoItemsAtom);
   const filteredTodoItems = useRecoilValue(filteredTodoItemsSelector);
+  const currentDate = useRecoilValue(currentDateAtom);
 
   function handleAddTodoItem() {
     // TODO: add 관련 LocalStorage 로직

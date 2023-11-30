@@ -48,3 +48,8 @@ export const filterAtom = atom<FilterType>({
   key: "filterAtom",
   default: "all",
 });
+
+export const currentDateAtom = atom({
+  key: "currentDateAtom",
+  default: new Date(),
+});
