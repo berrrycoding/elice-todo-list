@@ -42,7 +42,7 @@ export const todoItemsProgressPercentageSelector = selector({
   // get은 보통의 경우 캐싱(저장)되어서 재활용이 가능하지만,
   // 다시 실행되는 경우가 있다 ->
   get: ({ get }) => {
-    const todoItems = get(todoItemsAtom);
+    const todoItems = get(filteredTodoItemsSelector);
 
     const 전체_항목 = todoItems.length;
     const 완료된_항목 = todoItems.filter((item) => item.isDone).length;
