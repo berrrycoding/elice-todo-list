@@ -2,19 +2,19 @@
 
 ## How To Run
 
-1. Clone project.
+1. 프로젝트 클론 받기
 
 ```
-git clone
+git clone https://github.com/berrrycoding/elice-todo-list.git
 ```
 
-2. Change directory to elice-todo-list and install packages in it.
+2. elice-todo-list로 이동해서 패키지를 설치합니다.
 
 ```
 cd elice-todo-list && npm install
 ```
 
-3. Start project
+3. 프로젝트를 실행합니다.
 
 ```
 npm run dev
