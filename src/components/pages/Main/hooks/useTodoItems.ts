@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
+  fetchTodoItemsSelector,
   filteredTodoItemsSelector,
   todoItemsAtom,
 } from "../../../../states/todoItems";
@@ -15,36 +17,13 @@ export default function useTodoItems() {
   // 로컬 state <-> 전역 state (recoil)
   const setTodoItems = useSetRecoilState(todoItemsAtom);
   const filteredTodoItems = useRecoilValue(filteredTodoItemsSelector);
+  const fetchTodoItems = useRecoilValue(fetchTodoItemsSelector);
 
-  function handleAddTodoItem() {
-    // TODO: add 관련 LocalStorage 로직
-    // TODO: add state 관련 로직
-  }
-
-  function handleEditTodoItem() {
-    // TODO: edit 관련 LocalStorage 로직
-    // TODO: edit state 관련 로직
-  }
-
-  function handleDone(index: number) {
-    const newTodoItems = [...filteredTodoItems];
-    newTodoItems[index].isDone = true;
-
-    setTodoItems(newTodoItems);
-  }
-
-  function handleCancelDone(index: number) {
-    const newTodoItems = [...filteredTodoItems];
-    newTodoItems[index].isDone = false;
-
-    setTodoItems(newTodoItems);
-  }
+  useEffect(() => {
+    setTodoItems(fetchTodoItems);
+  }, [fetchTodoItems, setTodoItems]);
 
   return {
     todoItems: filteredTodoItems,
-    onAddTodoItem: handleAddTodoItem,
-    onEditTodoItem: handleEditTodoItem,
-    onDone: handleDone,
-    onCancelDone: handleCancelDone,
   };
 }

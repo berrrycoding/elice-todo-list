@@ -1,11 +1,22 @@
 import { atom, selector } from "recoil";
-import todoItemsDummy from "../assets/dummy/todoItems";
-import { FilterType, TodoItem } from "../types";
+import getTodoItems from "../apis/getTodoItems";
+import { FilterType, InputMode, TodoItem } from "../types";
 import { getFormattedDate } from "../utils/getFormattedDate";
 
 export const todoItemsAtom = atom<TodoItem[]>({
   key: "todoItemsAtom",
-  default: todoItemsDummy,
+  default: [],
+});
+
+// data fetching을 캐싱하기 위해서 selector를 사용합니다.
+// useTodoItems 파일에서 useEffect로 불러와서 todoItemsAtom의 setter 함수를 통해서 저장하게 됩니다.
+export const fetchTodoItemsSelector = selector({
+  key: "fetchTodoItems",
+  get: async ({ get }) => {
+    const currentDate = get(currentDateAtom);
+    const response = await getTodoItems(currentDate);
+    return response.data.items;
+  },
 });
 
 export const filteredTodoItemsSelector = selector({
@@ -61,4 +72,9 @@ export const filterAtom = atom<FilterType>({
 export const currentDateAtom = atom({
   key: "currentDateAtom",
   default: new Date(),
+});
+
+export const inputModeAtom = atom<InputMode>({
+  key: "inputModeAtom",
+  default: { type: "default" },
 });
