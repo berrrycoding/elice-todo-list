@@ -24,7 +24,9 @@ export default function ItemStatusButton({ item }: Props) {
         <div
           onClick={(e) => {
             // 로딩 시에는 클릭 이벤트를 막습니다.
+            // 아직 완료처리도 안되었는데, 버튼을 반복적으로 의도적으로 누르는 수가 있음.
             // 한번 api 요청을 했는데 계속 버튼을 누르는 경우를 막기 위함입니다.
+            // 아직 로딩인 경우 api 호출이 발생하지 않도록 막아놓음.
             if (isLoadingDoneTodoItem) {
               return;
             }

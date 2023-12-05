@@ -16,6 +16,8 @@ export default function TextInputForm({
   onCancel,
 }: Props) {
   const [isLoading, setIsLoading] = useState(false);
+  // state가 변경되면 해당 컴포넌트는 리렌더링 됨
+  // 이 state의 선언부를 최대한 안에 둘 수록 리렌더링이 덜 되겠죠?
   const [value, setValue] = useState(defaultValue);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -30,6 +32,10 @@ export default function TextInputForm({
       return;
     }
 
+    // add인 경우와 edit인 경우 둘 다 사용할 수 없음
+
+    // add인 경우와 edit인 경우에 해당하는 onSave함수는
+    // 밖에서 넣어주도록 만들면 되겠다.
     await onSave(value);
     setIsLoading(false);
   }
