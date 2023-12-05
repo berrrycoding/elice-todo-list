@@ -20,7 +20,6 @@ export default function TodoItems() {
             textElement={
               <TodoItem {...item} onEditMode={() => onEditMode(item)} />
             }
-            onEditMode={onEditMode}
           />
         );
       })}

@@ -6,7 +6,6 @@ interface Props {
   item: TodoItemType;
   isEditMode: boolean;
   textElement?: ReactNode;
-  onEditMode: (item: TodoItemType) => void;
 }
 
 export default function EditableTextElement({
