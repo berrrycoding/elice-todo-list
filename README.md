@@ -23,40 +23,56 @@ npm run dev
 ## apis/\*
 
 - `getTodoItems`
+
   input
+
   ```
   date: Date;
   ```
+
   output
+
   ```
   data: {
     items: TodoItem[];
   }
   ```
+
 - `addTodoItem`
+
   input
+
   ```
   content: string;
   date: Date;
   ```
+
   output
+
   ```
   data: {
     item: TodoItem;
   }
   ```
+
 - `updateItem`
+
   input
+
   ```
   item: TodoItem;
   ```
+
   output
+
   ```
   data: {
     item: TodoItem;
   }
   ```
+
 - `deleteTodoItem`
+
   input
 
   ```
@@ -72,6 +88,7 @@ npm run dev
   ```
 
 - `doneTodoItem`
+
   input
 
   ```
@@ -87,6 +104,7 @@ npm run dev
   ```
 
 - `cancelDoneTodoItem`
+
   input
 
   ```
