@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { FiCheck } from "react-icons/fi";
 import { useSetRecoilState } from "recoil";
 import cancelDoneTodoItem from "../../../../apis/cancelDoneTodoItem";
@@ -13,10 +13,12 @@ interface Props {
 
 export default function ItemStatusButton({ item }: Props) {
   const { id, isDone } = item;
-  const { isLoading: isLoadingDoneTodoItem, onDoneTodoItem } =
+  const { isPending: isLoadingDoneTodoItem, mutateAsync: onDoneTodoItem } =
     useDoneTodoItem();
-  const { isLoading: isLoadingCancelDoneTodoItem, onCancelDoneTodoItem } =
-    useCancelDoneTodoItem();
+  const {
+    isPending: isLoadingCancelDoneTodoItem,
+    mutateAsync: onCancelDoneTodoItem,
+  } = useCancelDoneTodoItem();
 
   return (
     <>
@@ -54,46 +56,37 @@ export default function ItemStatusButton({ item }: Props) {
 function useDoneTodoItem() {
   const setTodoItems = useSetRecoilState(todoItemsAtom);
 
-  const [isLoading, setIsLoading] = useState(false);
+  return useMutation({
+    mutationFn: async function handleDone(id: string) {
+      await doneTodoItem(id);
 
-  async function handleDone(id: string) {
-    setIsLoading(true);
-    await doneTodoItem(id);
-
-    setTodoItems((prev) => {
-      const index = prev.findIndex((item) => item.id === id);
-      return [
-        ...prev.slice(0, index),
-        { ...prev[index], isDone: true },
-        ...prev.slice(index + 1),
-      ];
-    });
-    setIsLoading(false);
-  }
-
-  return { isLoading, onDoneTodoItem: handleDone };
+      setTodoItems((prev) => {
+        const index = prev.findIndex((item) => item.id === id);
+        return [
+          ...prev.slice(0, index),
+          { ...prev[index], isDone: true },
+          ...prev.slice(index + 1),
+        ];
+      });
+    },
+  });
 }
 
 function useCancelDoneTodoItem() {
   const setTodoItems = useSetRecoilState(todoItemsAtom);
 
-  const [isLoading, setIsLoading] = useState(false);
+  return useMutation({
+    mutationFn: async function handleCancelDone(id: string) {
+      await cancelDoneTodoItem(id);
 
-  async function handleCancelDone(id: string) {
-    setIsLoading(true);
-
-    await cancelDoneTodoItem(id);
-
-    setTodoItems((prev) => {
-      const index = prev.findIndex((item) => item.id === id);
-      return [
-        ...prev.slice(0, index),
-        { ...prev[index], isDone: false },
-        ...prev.slice(index + 1),
-      ];
-    });
-    setIsLoading(false);
-  }
-
-  return { isLoading, onCancelDoneTodoItem: handleCancelDone };
+      setTodoItems((prev) => {
+        const index = prev.findIndex((item) => item.id === id);
+        return [
+          ...prev.slice(0, index),
+          { ...prev[index], isDone: false },
+          ...prev.slice(index + 1),
+        ];
+      });
+    },
+  });
 }

@@ -1,3 +1,4 @@
+import { useMutation } from "@tanstack/react-query";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import addTodoItem from "../../../../apis/addTodoItem";
 import { currentDateAtom, todoItemsAtom } from "../../../../states/todoItems";
@@ -7,7 +8,8 @@ import useInputMode from "../hooks/useInputMode";
 // UI를 담당하는 로직(AddInput)과 비즈니스 로직(useAddInput)을 분리하는 것이 좋습니다.
 export default function AddInput() {
   const { inputMode, onResetInputMode } = useInputMode();
-  const { onAddTodoItem } = useAddTodoItem();
+  // mutateAsync는 Promise를 반환합니다.
+  const { mutateAsync: onAddTodoItem } = useAddTodoItem();
 
   return (
     <>
@@ -28,12 +30,12 @@ function useAddTodoItem() {
   const currentDate = useRecoilValue(currentDateAtom);
   const setTodoItems = useSetRecoilState(todoItemsAtom);
 
-  async function handleAddTodoItem(content: string) {
-    const result = await addTodoItem({ content, date: currentDate });
-    const newItem = result.data.item;
+  return useMutation({
+    mutationFn: async function handleAddTodoItem(content: string) {
+      const result = await addTodoItem({ content, date: currentDate });
+      const newItem = result.data.item;
 
-    setTodoItems((prev) => [...prev, newItem]);
-  }
-
-  return { onAddTodoItem: handleAddTodoItem };
+      setTodoItems((prev) => [...prev, newItem]);
+    },
+  });
 }

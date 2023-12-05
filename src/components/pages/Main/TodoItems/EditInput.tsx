@@ -1,3 +1,4 @@
+import { useMutation } from "@tanstack/react-query";
 import { useSetRecoilState } from "recoil";
 import updateItem from "../../../../apis/updateItem";
 import { todoItemsAtom } from "../../../../states/todoItems";
@@ -10,7 +11,7 @@ interface Props {
 }
 
 export default function EditInput({ item }: Props) {
-  const { onEditTodoItem } = useEditTodoItem();
+  const { mutateAsync: onEditTodoItem } = useEditTodoItem();
 
   const { onResetInputMode } = useInputMode();
 
@@ -29,19 +30,19 @@ export default function EditInput({ item }: Props) {
 function useEditTodoItem() {
   const setTodoItems = useSetRecoilState(todoItemsAtom);
 
-  async function handleEditTodoItem(item: TodoItem) {
-    const result = await updateItem(item);
-    const updatedItem = result.data.item;
+  return useMutation({
+    mutationFn: async function handleEditTodoItem(item: TodoItem) {
+      const result = await updateItem(item);
+      const updatedItem = result.data.item;
 
-    setTodoItems((prev) => {
-      const newTodoItems = [...prev];
-      const index = newTodoItems.findIndex(
-        (item) => item.id === updatedItem.id
-      );
-      newTodoItems[index] = updatedItem;
-      return newTodoItems;
-    });
-  }
-
-  return { onEditTodoItem: handleEditTodoItem };
+      setTodoItems((prev) => {
+        const newTodoItems = [...prev];
+        const index = newTodoItems.findIndex(
+          (item) => item.id === updatedItem.id
+        );
+        newTodoItems[index] = updatedItem;
+        return newTodoItems;
+      });
+    },
+  });
 }
